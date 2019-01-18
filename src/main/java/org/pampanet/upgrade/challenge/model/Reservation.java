@@ -1,6 +1,8 @@
 package org.pampanet.upgrade.challenge.model;
 
 import org.hibernate.annotations.Formula;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
@@ -14,14 +16,16 @@ import java.util.UUID;
 public class Reservation {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    UUID id;
-    String name;
+    @Type(type="pg-uuid")
+    @Column(columnDefinition = "uuid not null")
+    private UUID id;
+
+    private String name;
 
     @Formula("lower(during)")
-    LocalDateTime checkin;
+    private LocalDateTime checkin;
     @Formula("upper(during)")
-    LocalDateTime checkout;
+    private LocalDateTime checkout;
 
     public Reservation(){}
 

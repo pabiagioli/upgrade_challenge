@@ -1,6 +1,7 @@
-CREATE TABLE public.reservations
+
+CREATE TABLE IF NOT EXISTS public.reservations
 (
-    id uuid NOT NULL,
+    id uuid NOT NULL PRIMARY KEY,
     during tsrange NOT NULL,
     name character varying(255) COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT overlapper EXCLUDE USING gist (

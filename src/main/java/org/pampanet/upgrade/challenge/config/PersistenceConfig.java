@@ -13,6 +13,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -69,10 +70,9 @@ public class PersistenceConfig {
         final LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
             em.setDataSource(dataSource());
         em.setPackagesToScan("org.pampanet.upgrade.challenge.model");
-
         final JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-        //((HibernateJpaVendorAdapter) vendorAdapter).setDatabase(Database.POSTGRESQL);
-        //((HibernateJpaVendorAdapter) vendorAdapter).setGenerateDdl(true);
+        ((HibernateJpaVendorAdapter) vendorAdapter).setDatabase(Database.POSTGRESQL);
+        ((HibernateJpaVendorAdapter) vendorAdapter).setGenerateDdl(false);
         em.setJpaVendorAdapter(vendorAdapter);
         em.setJpaProperties(additionalProperties());
 
@@ -81,10 +81,10 @@ public class PersistenceConfig {
 
     final Properties additionalProperties() {
         final Properties hibernateProperties = new Properties();
-        hibernateProperties.setProperty("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
+        hibernateProperties.setProperty("hibernate.hbm2ddl.auto", "none");
         hibernateProperties.setProperty("hibernate.dialect", env.getProperty("hibernate.dialect"));
         hibernateProperties.setProperty("hibernate.cache.use_second_level_cache", "false");
-
+        hibernateProperties.setProperty("spring.datasource.initialization-mode", "always");
 
         return hibernateProperties;
     }
